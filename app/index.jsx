@@ -3,25 +3,23 @@ import React from 'react';
 import {Router, Route, IndexRoute, browserHistory} from 'react-router';
 import {render} from 'react-dom';
 import {Provider, connect} from 'react-redux';
-import {createStore} from 'redux';
+import thunk from 'redux-thunk';
+import {createStore, applyMiddleware} from 'redux';
+import {treeReducer} from './reducers';
+import TreeView from './components/treeView.jsx';
 
-var reducer = function(state = {}, action){
-  switch (action.type){
-    default:
-      return state;
-  }
-};
+var store = createStore(
+  treeReducer,
+  applyMiddleware(thunk)
+);
 
-var store = createStore(reducer);
-
-
-var Index = connect()(React.createClass({
+var Index = React.createClass({
   render: function() {
     return (
-      <div></div>
+      <TreeView/>
     );
   }
-}));
+});
 
 var router = (
   <Router history={browserHistory}>

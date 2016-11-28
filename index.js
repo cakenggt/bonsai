@@ -3,6 +3,9 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
+const passport = require('passport');
 const http = require('http').Server(app);
 const Sequelize = require('sequelize');
 const db = new Sequelize(process.env.DATABASE_URL, {
@@ -18,8 +21,15 @@ db.sync();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
+app.use(cookieParser());
+
+app.use(session({secret: process.env.DATABASE_URL}));
+
 //Deliver the public folder statically
 app.use(express.static('public'));
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 //This tells the server to listen
 var port = process.env.PORT;
